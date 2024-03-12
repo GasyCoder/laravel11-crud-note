@@ -1,6 +1,12 @@
 <x-app-layout>
     <div class="note-container single-note max-w-md mx-auto bg-white p-6 rounded-lg shadow-md mt-4">
-        <h1 class="text-2xl font-bold mb-4">Ajouter note</h1>
+        @session('status')
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+            <strong class="font-bold">Succès !</strong>
+            <span class="block sm:inline">{{ $value }}</span>
+        </div>
+        @endsession
+        <h1 class="text-2xl font-bold mb-4 mt-4">Ajouter note</h1>
         <form action="{{ route('note.store') }}" method="POST" class="note">
             @csrf
             <textarea name="note" rows="10" class="note-body w-full p-2 border border-gray-300 rounded-lg mb-4"

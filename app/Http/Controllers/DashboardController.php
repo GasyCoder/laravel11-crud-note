@@ -12,6 +12,7 @@ class DashboardController extends Controller
     {   
         $userId = Auth::user()->id;
         $notesCount = Note::where('user_id', $userId)->count();
+
         return view("dashboard", [
             "notesCount"=> $notesCount,
         ]);

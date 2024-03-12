@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Note;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NoteController extends Controller
 {
@@ -39,7 +40,7 @@ class NoteController extends Controller
         $data['user_id'] = $request->user()->id;
         $note = Note::create($data);
 
-        return to_route('note.show', $note)->with('message', 'Note was create');
+        return to_route('note.create', $note)->with('status', 'La note a été créée avec succès !');
     }
 
     /**
@@ -86,11 +87,51 @@ class NoteController extends Controller
      */
     public function destroy(Note $note)
     {
-        if ($note->user_id !== request()->user()->id) {
+        if ($note->user_id !== auth()->id()) {
             abort(403);
         }
         $note->delete();
 
-        return to_route('note.index')->with('message', 'Note was deleted');
+        return redirect()->route('note.index')->with('message', 'Note was deleted');
     }
+
+    public function restore($id)
+    {
+        $note = Note::onlyTrashed()->where('id', $id)->firstOrFail();
+
+        if ($note->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $note->restore();
+
+        return redirect()->route('note.index')->with('message', 'Note was restored');
+    }
+
+    public function forceDelete($id)
+    {
+        $note = Note::onlyTrashed()->where('id', $id)->firstOrFail();
+
+        if ($note->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $note->forceDelete();
+
+        return redirect()->route('note.index')->with('message', 'Note was permanently deleted');
+    }
+
+
+    public function trash(Note $note)
+    {   
+        $userId = Auth::user()->id;
+
+        $trashCount = Note::onlyTrashed()->where('user_id', $userId)->count();
+
+        return view('note.trash-note', [
+            'trashCount'  => $trashCount,
+        ]);
+    }
+
+
 }
