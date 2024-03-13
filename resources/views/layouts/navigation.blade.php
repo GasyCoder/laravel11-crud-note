@@ -19,7 +19,7 @@
                         {{ __('Notes') }}
                     </x-nav-link>
                     <x-nav-link :href="route('trash.note')" :active="request()->routeIs('trash.note')">
-                        {{ __('Corbeille') }} <sup class="text-red-400">({{ $trashCount }})</sup>
+                        {{ __('Corbeille') }} <sup class="text-red-400 font-bold">({{ $trashCount }})</sup>
                     </x-nav-link>
                 </div>
             </div>

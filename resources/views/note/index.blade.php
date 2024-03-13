@@ -20,7 +20,7 @@
                     <form action="{{ route('note.destroy', $note) }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button class="px-2 py-1 bg-red-300 text-black rounded hover:bg-gray-400">Supprimer</button>
+                        <button class="px-2 py-1 bg-gray-300 text-black rounded hover:bg-gray-400">Corbeille</button>
                     </form>
                 </div>
             </div>

@@ -16,7 +16,7 @@ class NoteController extends Controller
         $notes = Note::query()
             ->where('user_id', request()->user()->id)
             ->orderBy('created_at', 'desc')
-            ->paginate();
+            ->paginate(10);
         return view('note.index', ['notes' => $notes]);
     }
 
@@ -118,7 +118,7 @@ class NoteController extends Controller
 
         $note->forceDelete();
 
-        return redirect()->route('note.index')->with('message', 'Note was permanently deleted');
+        return redirect()->route('trash.note')->with('status', 'La note a été définitivement supprimée');
     }
 
 
@@ -127,11 +127,10 @@ class NoteController extends Controller
         $userId = Auth::user()->id;
 
         $trashCount = Note::onlyTrashed()->where('user_id', $userId)->count();
-
+        $trashes  = Note::onlyTrashed()->where('user_id', $userId)->paginate(10);
         return view('note.trash-note', [
             'trashCount'  => $trashCount,
+            'trashes'   => $trashes,
         ]);
     }
-
-
 }

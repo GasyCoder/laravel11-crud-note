@@ -17,12 +17,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('note', NoteController::class);
-    // Route::get('/trash-note', [NoteController::class, 'trash'])->name('trash.note');
+    Route::get('/trash-note', [NoteController::class, 'trash'])->name('trash.note');
+    Route::post('/restore/{id}', [NoteController::class, 'restore'])->name('trash.restore');
+    Route::delete('/delete-force/{id}', [NoteController::class, 'forceDelete'])->name('trash.delete');
 
-    Route::get('/trash-note', function () {
-    $trashCount = Note::onlyTrashed()->count();
-        return view('note.trash-note', compact('trashCount'));
-    })->name('trash.note');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
